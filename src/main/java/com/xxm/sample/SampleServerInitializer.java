@@ -16,6 +16,8 @@ public class SampleServerInitializer extends ChannelInitializer<SocketChannel> {
     protected void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
 
+        //HttpServerCodec实现对请求的解码和响应的编码
+        //合二为一的实现了HttpRequestDecoder和HttpResponseEncoder的功能
         pipeline.addLast("httpServerCodec", new HttpServerCodec())
                 //添加请求处理器
                 .addLast("SampleHttpServerHandler", new SampleHttpServerHandler());
