@@ -5,6 +5,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -16,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Client {
 
     public static void main(String[] args) {
-
+        start();
     }
 
     public static void start() {
@@ -25,14 +26,14 @@ public class Client {
         try {
             Bootstrap bootstrap = new Bootstrap();
             bootstrap.group(eventLoopGroup)
-                    .channel(SocketChannel.class)
+                    .channel(NioSocketChannel.class)
                     .handler(new ClientInitializer());
 
             ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8888).sync();
-            channelFuture.channel().writeAndFlush("test msg");
-            channelFuture.channel().close().sync();
+            //channelFuture.channel().writeAndFlush("test msg");
+            channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {
-            log.error("error: {}", e);
+            log.error("error", e);
         } finally {
             eventLoopGroup.shutdownGracefully();
         }

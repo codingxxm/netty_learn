@@ -22,6 +22,11 @@ public class ClientHandler extends SimpleChannelInboundHandler<String> {
     }
 
     @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        ctx.writeAndFlush("msg from client init");
+    }
+
+    @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         log.info("error:{}", cause);
         ctx.close();

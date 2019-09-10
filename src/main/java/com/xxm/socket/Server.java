@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Server {
 
     public static void main(String[] args) {
-
+        start();
     }
 
     public static void start() {
@@ -32,12 +32,14 @@ public class Server {
 
             //后面加sync()，netty才会一直等待
             ChannelFuture channelFuture = serverBootstrap.bind(8888).sync();
-            channelFuture.channel().close().sync();
+            log.info("server startup...");
+            channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             log.error("error: {}", e);
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
+            log.info("server shutdown");
         }
 
 
